@@ -19,7 +19,7 @@ add-highlighter shared/terra/double_string region '"'   (?<!\\)(?:\\\\)*" fill s
 add-highlighter shared/terra/single_string region "'"   (?<!\\)(?:\\\\)*' fill string
 add-highlighter shared/terra/comment       region '--'  $                 fill comment
 
-add-highlighter shared/terra/code/ regex \b(and|break|do|else|elseif|end|false|for|function|goto|if|in|local|nil|not|or|repeat|return|then|true|until|while|terra|quote|var%)\b 0:keyword
+add-highlighter shared/terra/code/ regex \b(and|break|do|else|elseif|end|false|for|function|goto|if|in|local|nil|not|or|repeat|return|then|true|until|while|terra|quote|var)\b 0:keyword
 
 # Commands
 # ‾‾‾‾‾‾‾‾
