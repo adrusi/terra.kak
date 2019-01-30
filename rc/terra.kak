@@ -19,7 +19,7 @@ add-highlighter shared/terra/double_string region '"'   (?<!\\)(?:\\\\)*" fill s
 add-highlighter shared/terra/single_string region "'"   (?<!\\)(?:\\\\)*' fill string
 add-highlighter shared/terra/comment       region '--'  $                 fill comment
 
-add-highlighter shared/terra/code/ regex \b(and|break|do|else|elseif|end|false|for|function|goto|if|in|local|nil|not|or|repeat|return|then|true|until|while|terra|quote%)\b 0:keyword
+add-highlighter shared/terra/code/ regex \b(and|break|do|else|elseif|end|false|for|function|goto|if|in|local|nil|not|or|repeat|return|then|true|until|while|terra|quote|var%)\b 0:keyword
 
 # Commands
 # ‾‾‾‾‾‾‾‾
@@ -53,7 +53,7 @@ define-command -hidden terra-indent-on-char %{
     evaluate-commands -no-hooks -draft -itersel %{
         # align middle and end structures to start and indent when necessary, elseif is already covered by else
         try %{ execute-keys -draft <a-x><a-k>^\h*(else)$<ret><a-\;><a-?>^\h*(if)<ret>s\A|\z<ret>)<a-&> }
-        try %{ execute-keys -draft <a-x><a-k>^\h*(end)$<ret><a-\;><a-?>^\h*(for|function|if|while|terra|quote)<ret>s\A|\z<ret>)<a-&> }
+        try %{ execute-keys -draft <a-x><a-k>^\h*(end)$<ret><a-\;><a-?>^\h*(for|function|if|while|terra|quote)(?!\w)<ret>s\A|\z<ret>)<a-&> }
     }
 }
 
@@ -64,7 +64,7 @@ define-command -hidden terra-indent-on-new-line %{
         # remove trailing white spaces from previous line
         try %{ execute-keys -draft k<a-x>s\h+$<ret>d }
         # indent after start structure
-        try %{ execute-keys -draft k<a-x><a-k>^\h*(else|elseif|for|function|if|while|terra|quote)\b<ret>j<a-gt> }
+        try %{ execute-keys -draft k<a-x><a-k>^\h*(else|elseif|for|function|if|while|terra|quote)(?!\w)\b<ret>j<a-gt> }
     }
 }
 
@@ -75,7 +75,7 @@ define-command -hidden terra-insert-on-new-line %[
         # wisely add end structure
         evaluate-commands -save-regs x %[
             try %{ execute-keys -draft k<a-x>s^\h+<ret>"xy } catch %{ reg x '' } # Save previous line indent in register x
-            try %[ execute-keys -draft k<a-x> <a-k>^<c-r>x(for|function|if|while|terra|quote)<ret> J}iJ<a-x> <a-K>^<c-r>x(else|end|elseif)$<ret> # Validate previous line and that it is not closed yet
+            try %[ execute-keys -draft k<a-x> <a-k>^<c-r>x(for|function|if|while|terra|quote)(?!\w)<ret> J}iJ<a-x> <a-K>^<c-r>x(else|end|elseif)(?!\w)$<ret> # Validate previous line and that it is not closed yet
                    execute-keys -draft o<c-r>xend<esc> ] # auto insert end
         ]
     ]
